@@ -103,8 +103,8 @@ Dynamic-Id-Card-Generator/
 ├── README.md               # This file
 ├── VHK.json               # Sample layout configuration
 ├── idcard-layout (2).json # Another sample layout
-└── passport_photo/        # Sample photos directory
-    └── 3.jpg              # Sample photo
+└── photo/        # Sample photos directory
+    └── sample.jpg              # Sample photo
 ```
 
 ## 🛠️ Technical Details
