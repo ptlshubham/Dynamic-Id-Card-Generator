@@ -1,0 +1,2857 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Modern ID Card Generator</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a6fd8;
+            --primary-light: #92a1f1;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #fafbfc;
+            --gray-100: #f4f5f7;
+            --gray-200: #e3e5e8;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --white: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --border-radius: 16px;
+            --border-radius-sm: 12px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--white);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1400px) {
+            .main-layout {
+                grid-template-columns: 1fr 350px;
+                gap: 1.5rem;
+            }
+        }
+
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .card-header {
+            padding: 2rem 2rem 1rem;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .file-upload {
+            position: relative;
+            border: 3px dashed var(--gray-300);
+            border-radius: var(--border-radius-sm);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--gray-50) 0%, #f8fafc 100%);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .file-upload.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+            box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.15);
+        }
+
+        .file-upload input[type="file"] {
+            display: none !important;
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .file-upload-text {
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .file-upload-hint {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%);
+            border-radius: var(--border-radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            white-space: nowrap;
+            min-height: 48px;
+            position: relative;
+            flex-direction: column;
+        }
+
+        .btn-text {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #6a4c93 100%);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: var(--white);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .preview-section {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .canvas-container {
+            position: relative;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .canvas-overlay {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .overlay-btn {
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .overlay-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-1px);
+        }
+
+        .controls-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .control-group {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--gray-50) 0%, #f8fafc 100%);
+            border-radius: var(--border-radius-sm);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .control-group:hover {
+            background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+            border-color: var(--primary-light);
+        }
+
+        .control-group.active-element {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .control-icon {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .control-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 1.1rem;
+        }
+
+        .control-coords {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .coord-input {
+            width: 5rem;
+            padding: 0.5rem 0.75rem;
+            border: 2px solid var(--gray-300);
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .coord-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .control-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-btn {
+            padding: 0.75rem 1rem;
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .settings-panel {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .settings-section {
+            padding: 2rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .form-input {
+            padding: 1rem;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .color-input {
+            width: 100%;
+            height: 3.5rem;
+            border-radius: var(--border-radius-sm);
+            border: 2px solid var(--gray-300);
+            cursor: pointer;
+        }
+
+        .font-controls {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .font-upload-btn {
+            padding: 0.75rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .font-upload-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .mapping-section {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .mapping-row {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .mapping-label {
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-mapped {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-unmapped {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .preview-card {
+            background: var(--white);
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .preview-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .preview-canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .preview-actions {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--gray-50) 0%, #f8fafc 100%);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 3.5rem;
+            height: 2rem;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: .4s;
+            border-radius: 34px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 1.5rem;
+            width: 1.5rem;
+            left: 0.25rem;
+            bottom: 0.25rem;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(1.5rem);
+        }
+
+        .range-input {
+            width: 100%;
+            height: 0.75rem;
+            border-radius: 0.375rem;
+            background: var(--gray-200);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .range-input::-moz-range-thumb {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: var(--shadow);
+        }
+
+        canvas {
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-md);
+        }
+
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-xl);
+            padding: 1.5rem 2rem;
+            max-width: 400px;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .notification.warning {
+            border-left: 4px solid var(--warning);
+        }
+
+        .cards-section {
+            grid-column: 1 / -1;
+            margin-top: 2rem;
+        }
+
+        /* Custom file input styling for font upload */
+        .custom-file-input {
+            display: none;
+        }
+
+        .font-url-input {
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            border: 2px solid var(--gray-300);
+            border-radius: 0.5rem;
+            width: 100%;
+            font-size: 0.9rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .font-url-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Progress bar styles */
+        .progress-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .progress-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            min-width: 400px;
+            text-align: center;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: var(--gray-200);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .progress-text {
+            color: var(--gray-700);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-stats {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* File name display styles */
+        .file-name-display {
+            margin-top: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #0ea5e9;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            color: #0369a1;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-name-display .file-icon {
+            font-size: 0.9rem;
+        }
+
+        .file-name-display.csv {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-color: #10b981;
+            color: #047857;
+        }
+
+        .file-name-display.layout {
+            background: linear-gradient(135deg, #fef7ff 0%, #f3e8ff 100%);
+            border-color: #8b5cf6;
+            color: #7c3aed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>ID Card Generator</h1>
+            <p>Create stunning professional ID cards with photos, names, IDs, and barcodes. Upload your template and CSV data to get started with our intuitive drag-and-drop interface.</p>
+        </header>
+
+        <div class="actions-bar">
+            <button class="btn btn-secondary" onclick="selectFile('template')" id="templateBtn">
+                <div class="btn-text">
+                    <span>🖼️</span>
+                    <span id="templateBtnText">Template Image</span>
+                </div>
+                <div id="templateFileName" class="file-name-display" style="display: none;"></div>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="selectFile('csv')" id="csvBtn">
+                <div class="btn-text">
+                    <span>📊</span>
+                    <span id="csvBtnText">CSV Data</span>
+                </div>
+                <div id="csvFileName" class="file-name-display csv" style="display: none;"></div>
+            </button>
+
+            <button class="btn btn-primary" onclick="processCSV()">
+                <div class="btn-text">
+                    <span>✨</span>
+                    Generate Cards
+                </div>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="exportLayout()">
+                <div class="btn-text">
+                    <span>📤</span>
+                    Export Layout
+                </div>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="saveLayoutLocal()">
+                <div class="btn-text">
+                    <span>💾</span>
+                    Save Layout
+                </div>
+            </button>
+            
+            <button class="btn btn-success" onclick="downloadAllZip()">
+                <div class="btn-text">
+                    <span>📦</span>
+                    Download ZIP
+                </div>
+            </button>
+            
+            <button class="btn btn-secondary" onclick="selectFile('layout')" id="layoutBtn">
+                <div class="btn-text">
+                    <span>📥</span>
+                    <span id="layoutBtnText">Import Layout</span>
+                </div>
+                <div id="layoutFileName" class="file-name-display layout" style="display: none;"></div>
+            </button>
+        </div>
+
+        <div class="main-layout">
+            <div class="card">
+                <div class="card-header">
+                    <h2>
+                        <span>🎨</span>
+                        Template & Controls
+                    </h2>
+                </div>
+                <div class="card-content">
+                    <div class="toggle-group">
+                        <label>
+                            <span class="toggle">
+                                <input id="snapToggle" type="checkbox" checked>
+                                <span class="slider"></span>
+                            </span>
+                            Snap to Grid
+                        </label>
+                        
+                        <label>
+                            Grid Size:
+                            <input id="gridSize" type="number" value="10" class="form-input" style="width: 80px; margin-left: 0.5rem;">
+                        </label>
+                        
+                        <label>
+                            <span class="toggle">
+                                <input id="showOverlaysInput" type="checkbox" checked onchange="toggleOverlayLabels()">
+                                <span class="slider"></span>
+                            </span>
+                            Show Overlays
+                        </label>
+                    </div>
+
+                        <div class="controls-grid">
+                            <div class="settings-section">
+                        <div class="section-title">
+                            <span>🔗</span>
+                            CSV Field Mapping
+                        </div>
+                        <p style="color: var(--gray-600); margin-bottom: 1.5rem; font-size: 0.9rem;">
+                            Map your CSV columns to card elements. Upload your CSV file first to see available columns.
+                        </p>
+                        
+                        <div class="mapping-section">
+                            <div class="mapping-row">
+                                <span class="mapping-label">Photo:</span>
+                                <select id="mapPhoto" class="form-input">
+                                    <option value="">— none —</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mapping-row">
+                                <span class="mapping-label">Name:</span>
+                                <select id="mapName" class="form-input">
+                                    <option value="">— none —</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mapping-row">
+                                <span class="mapping-label">ID/Roll:</span>
+                                <select id="mapID" class="form-input">
+                                    <option value="">— none —</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="control-group" id="row-photo" data-el="photo">
+                            <div class="control-icon">📷</div>
+                            <div class="control-info">
+                                <div class="control-label">
+                                    Photo
+                                    <span id="label-photo" class="status-indicator status-unmapped">Unmapped</span>
+                                </div>
+                                <div class="control-coords">
+                                    X: <input class="pos-input coord-input" id="photoX_input" type="number">
+                                    Y: <input class="pos-input coord-input" id="photoY_input" type="number">
+                                </div>
+                            </div>
+                            <div class="control-actions">
+                                <button class="control-btn" onclick="enterPlaceMode('photo')">Place</button>
+                                <button class="control-btn" onclick="nudgeElement('photo',0,-1)">▲</button>
+                                <button class="control-btn" onclick="nudgeElement('photo',0,1)">▼</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group" id="row-name" data-el="name">
+                            <div class="control-icon">👤</div>
+                            <div class="control-info">
+                                <div class="control-label">
+                                    Name
+                                    <span id="label-name" class="status-indicator status-unmapped">Unmapped</span>
+                                </div>
+                                <div class="control-coords">
+                                    X: <input class="pos-input coord-input" id="nameX_input" type="number">
+                                    Y: <input class="pos-input coord-input" id="nameY_input" type="number">
+                                </div>
+                            </div>
+                            <div class="control-actions">
+                                <button class="control-btn" onclick="enterPlaceMode('name')">Place</button>
+                                <button class="control-btn" onclick="nudgeElement('name',0,-1)">▲</button>
+                                <button class="control-btn" onclick="nudgeElement('name',0,1)">▼</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group" id="row-roll" data-el="roll">
+                            <div class="control-icon">🆔</div>
+                            <div class="control-info">
+                                <div class="control-label">
+                                    Roll / ID
+                                    <span id="label-roll" class="status-indicator status-unmapped">Unmapped</span>
+                                </div>
+                                <div class="control-coords">
+                                    X: <input class="pos-input coord-input" id="rollX_input" type="number">
+                                    Y: <input class="pos-input coord-input" id="rollY_input" type="number">
+                                </div>
+                            </div>
+                            <div class="control-actions">
+                                <button class="control-btn" onclick="enterPlaceMode('roll')">Place</button>
+                                <button class="control-btn" onclick="nudgeElement('roll',0,-1)">▲</button>
+                                <button class="control-btn" onclick="nudgeElement('roll',0,1)">▼</button>
+                            </div>
+                        </div>
+
+                        <div class="control-group" id="row-barcode" data-el="barcode">
+                            <div class="control-icon">🔢</div>
+                            <div class="control-info">
+                                <div class="control-label">
+                                    Barcode
+                                    <span id="label-barcode" class="status-indicator status-unmapped">Unmapped</span>
+                                </div>
+                                <div class="control-coords">
+                                    X: <input class="pos-input coord-input" id="barcodeX_input" type="number">
+                                    Y: <input class="pos-input coord-input" id="barcodeY_input" type="number">
+                                </div>
+                            </div>
+                            <div class="control-actions">
+                                <button class="control-btn" onclick="enterPlaceMode('barcode')">Place</button>
+                                <button class="control-btn" onclick="nudgeElement('barcode',0,-1)">▲</button>
+                                <button class="control-btn" onclick="nudgeElement('barcode',0,1)">▼</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Photo Size</label>
+                        <input id="photoSize_input" type="range" min="16" max="400" value="80" 
+                               class="range-input" oninput="updatePhotoSizeFromSlider(this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <div class="card-header">
+                    <h2>
+                        <span>👁️</span>
+                        Live Preview
+                    </h2>
+                </div>
+                <div class="canvas-container">
+                    <div class="canvas-overlay">
+                        <button class="overlay-btn" onclick="toggleOverlayLabels()">
+                            👁️ Overlays
+                        </button>
+                        <button class="overlay-btn" onclick="snapAllToGrid()">
+                            📐 Snap to Grid
+                        </button>
+                    </div>
+                    <canvas id="preview" width="420" height="600"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="section-title">
+                        <span>⚙️</span>
+                        Active Element: <span id="activeField" style="color: var(--primary);">Photo</span>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Font Family</label>
+                            <div class="font-controls">
+                                <select id="fontFamily" class="form-input">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Roboto">Roboto</option>
+                                    <option value="Inter">Inter</option>
+                                    <option value="Open Sans">Open Sans</option>
+                                    <option value="Lato">Lato</option>
+                                    <option value="Times New Roman">Times New Roman</option>
+                                    <option value="Georgia">Georgia</option>
+                                </select>
+                                <button type="button" class="font-upload-btn" onclick="showFontOptions()">
+                                    📁 Add Font
+                                </button>
+                            </div>
+                            <input type="url" id="fontUrl" class="font-url-input" placeholder="Or paste Google Fonts URL..." style="display: none;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Font Size (px)</label>
+                            <input id="fontSize" type="number" value="20" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Font Weight</label>
+                            <select id="fontWeight" class="form-input">
+                                <option value="400">Normal</option>
+                                <option value="700">Bold</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Font Style</label>
+                            <select id="fontStyle" class="form-input">
+                                <option value="normal">Normal</option>
+                                <option value="italic">Italic</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Text Color</label>
+                            <input id="fontColor" type="color" value="#000000" class="color-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Line Height (px)</label>
+                            <input id="lineHeight" type="number" value="22" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Max Width (px)</label>
+                            <input id="maxWidth" type="number" value="300" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Text Alignment</label>
+                            <select id="textAlign" class="form-input">
+                                <option value="left">Left</option>
+                                <option value="center">Center</option>
+                                <option value="right">Right</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Auto-fit Font</label>
+                            <select id="autoFit" class="form-input">
+                                <option value="1">Enabled</option>
+                                <option value="0">Disabled</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Max Lines</label>
+                            <input id="maxLines" type="number" value="2" min="1" max="10" class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" onclick="applyStyleToActive()">Apply to Active</button>
+                        <button class="btn btn-secondary" onclick="applyStyleToAll()">Apply to All Text</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="section-title">
+                        <span>📷</span>
+                        Photo Controls
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Photo Size (px)</label>
+                            <input id="photoSize" type="number" value="80" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Shape</label>
+                            <select id="photoShape" class="form-input">
+                                <option value="circle">Circle</option>
+                                <option value="rectangle">Rectangle</option>
+                                <option value="rounded">Rounded</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Border Width (px)</label>
+                            <input id="photoBorder" type="number" value="0" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Border Color</label>
+                            <input id="photoBorderColor" type="color" value="#ffffff" class="color-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Border Radius (px)</label>
+                            <input id="photoRadius" type="number" value="12" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="section-title">
+                        <span>🔢</span>
+                        Barcode Controls
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Barcode Source</label>
+                            <select id="mapBarcode" class="form-input">
+                                <option value="">— none —</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Width (px)</label>
+                            <input id="barcodeW" type="number" value="300" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Height (px)</label>
+                            <input id="barcodeH" type="number" value="60" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Format</label>
+                            <select id="barcodeFormat" class="form-input">
+                                <option value="CODE128">CODE128</option>
+                                <option value="EAN13">EAN13</option>
+                                <option value="EAN8">EAN8</option>
+                                <option value="UPC">UPC</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="section-title">
+                        <span>📐</span>
+                        Card Dimensions
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Card Width (px)</label>
+                            <input id="cardW" type="number" value="800" class="form-input">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Card Height (px)</label>
+                            <input id="cardH" type="number" value="1200" class="form-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card cards-section">
+            <div class="card-header">
+                <h2>
+                    <span>🎴</span>
+                    Generated Card Previews
+                </h2>
+            </div>
+            <div class="card-content">
+                <div class="preview-grid" id="cardsContainer">
+                    <!-- Generated cards will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden file inputs -->
+    <input id="templateFile" type="file" accept="image/*" style="display: none;">
+    <input id="csvFile" type="file" accept=".csv" style="display: none;">
+    <input id="layoutFile" type="file" accept=".json" style="display: none;">
+    <input id="fontFile" type="file" accept=".ttf,.otf,.woff,.woff2" style="display: none;">
+
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+    <script>
+        let templateImage = null;
+        let csvHeaders = [];
+        let csvRows = [];
+        let selectedElement = 'photo';
+        let placingElement = null;
+        let showOverlays = true;
+        let customFonts = {};
+
+        const defaultLayout = {
+            cardW: 800, cardH: 1200,
+            photoX: 400, photoY: 180, photoSize: 80, photoShape: 'circle', photoBorder: 0, photoBorderColor: '#ffffff', photoRadius: 12,
+            nameX: 80, nameY: 400, nameSize: 28, nameFamily: 'Arial', nameWeight: 700, nameStyle: 'normal', nameColor: '#000000', nameLine: 36, nameMaxWidth: 500, nameAlign: 'left', nameMaxLines: 2,
+            rollX: 80, rollY: 460, rollSize: 20, rollFamily: 'Arial', rollWeight: 400, rollStyle: 'normal', rollColor: '#000000', rollLine: 24, rollMaxWidth: 300, rollAlign: 'left',
+            barcodeX: 80, barcodeY: 520, barcodeW: 300, barcodeH: 60, barcodeFormat: 'CODE128'
+        };
+        let layout = JSON.parse(JSON.stringify(defaultLayout));
+
+        const preview = document.getElementById('preview');
+        const pctx = preview.getContext('2d');
+        function $(id) { return document.getElementById(id); }
+
+        // File name display functions
+        function updateFileNameDisplay(type, fileName) {
+            const displays = {
+                template: {
+                    display: $('templateFileName'),
+                    icon: '🖼️'
+                },
+                csv: {
+                    display: $('csvFileName'),
+                    icon: '📊'
+                },
+                layout: {
+                    display: $('layoutFileName'),
+                    icon: '📥'
+                }
+            };
+
+            const config = displays[type];
+            if (config && config.display) {
+                if (fileName) {
+                    config.display.innerHTML = `<span class="file-icon">${config.icon}</span>${fileName}`;
+                    config.display.style.display = 'flex';
+                } else {
+                    config.display.style.display = 'none';
+                }
+            }
+        }
+
+        // Progress bar functions
+        function showProgressModal() {
+            const modal = document.createElement('div');
+            modal.className = 'progress-modal';
+            modal.id = 'progressModal';
+            modal.innerHTML = `
+                <div class="progress-content">
+                    <h3 style="margin-bottom: 1rem; color: var(--gray-900);">Creating ZIP Archive</h3>
+                    <div class="progress-text" id="progressText">Preparing files...</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="progress-stats" id="progressStats">0 of 0 cards processed</div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            return modal;
+        }
+
+        function updateProgress(current, total, status = '') {
+            const progressBar = $('progressBar');
+            const progressText = $('progressText');
+            const progressStats = $('progressStats');
+            
+            if (progressBar && progressText && progressStats) {
+                const percentage = total > 0 ? Math.round((current / total) * 100) : 0;
+                progressBar.style.width = percentage + '%';
+                progressText.textContent = status || `Processing card ${current} of ${total}`;
+                progressStats.textContent = `${current} of ${total} cards processed`;
+            }
+        }
+
+        function hideProgressModal() {
+            const modal = $('progressModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        // Fixed file selection function to prevent double popups
+        function selectFile(type) {
+            let input;
+            switch(type) {
+                case 'template':
+                    input = $('templateFile');
+                    break;
+                case 'csv':
+                    input = $('csvFile');
+                    break;
+                case 'layout':
+                    input = $('layoutFile');
+                    break;
+                case 'font':
+                    input = $('fontFile');
+                    break;
+                default:
+                    return;
+            }
+            
+            if (input) {
+                input.click();
+            }
+        }
+
+        // Fixed font options function
+        function showFontOptions() {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                padding: 2rem;
+                border-radius: 1rem;
+                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+                max-width: 400px;
+                width: 90%;
+            `;
+            
+            content.innerHTML = `
+                <h3 style="margin-bottom: 1.5rem; color: var(--gray-900); font-size: 1.25rem;">Add Custom Font</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <button onclick="selectFile('font'); closeModal()" class="btn btn-primary" style="justify-content: center;">
+                        📁 Upload Font File (.ttf, .otf, .woff)
+                    </button>
+                    <button onclick="showUrlInput()" class="btn btn-secondary" style="justify-content: center;">
+                        🔗 Load from Google Fonts URL
+                    </button>
+                    <button onclick="closeModal()" class="btn btn-secondary" style="justify-content: center;">
+                        ❌ Cancel
+                    </button>
+                </div>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            window.closeModal = () => document.body.removeChild(modal);
+            window.showUrlInput = () => {
+                const urlInput = document.createElement('input');
+                urlInput.type = 'url';
+                urlInput.placeholder = 'https://fonts.googleapis.com/css2?family=...';
+                urlInput.style.cssText = `
+                    width: 100%;
+                    padding: 0.75rem;
+                    border: 2px solid var(--gray-300);
+                    border-radius: 0.5rem;
+                    margin: 1rem 0;
+                `;
+                
+                const submitBtn = document.createElement('button');
+                submitBtn.textContent = 'Load Font';
+                submitBtn.className = 'btn btn-primary';
+                submitBtn.style.cssText = 'width: 100%; justify-content: center; margin-top: 0.5rem;';
+                submitBtn.onclick = () => {
+                    if (urlInput.value) {
+                        loadFontFromUrl(urlInput.value);
+                        closeModal();
+                    }
+                };
+                
+                content.innerHTML = `
+                    <h3 style="margin-bottom: 1.5rem; color: var(--gray-900); font-size: 1.25rem;">Load Font from URL</h3>
+                    <p style="margin-bottom: 1rem; color: var(--gray-600); font-size: 0.9rem;">
+                        Paste a Google Fonts CSS URL or any other font CSS URL:
+                    </p>
+                `;
+                content.appendChild(urlInput);
+                content.appendChild(submitBtn);
+                
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.className = 'btn btn-secondary';
+                cancelBtn.style.cssText = 'width: 100%; justify-content: center; margin-top: 0.5rem;';
+                cancelBtn.onclick = closeModal;
+                content.appendChild(cancelBtn);
+            };
+        }
+
+        // Notification system
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 1.2rem;">${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
+                    <span style="font-weight: 500;">${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Font loading functions
+        function loadCustomFont(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            updateFileNameDisplay('font', file.name);
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const fontName = file.name.replace(/\.[^/.]+$/, "");
+                const fontFace = new FontFace(fontName, e.target.result);
+                
+                fontFace.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                    customFonts[fontName] = fontName;
+                    
+                    const select = $('fontFamily');
+                    const option = new Option(fontName, fontName);
+                    select.add(option);
+                    select.value = fontName;
+                    
+                    showNotification(`Font "${fontName}" loaded successfully!`);
+                    applyStyleToActive();
+                }).catch(function(error) {
+                    console.error('Font loading failed:', error);
+                    showNotification('Failed to load font file', 'error');
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        function loadFontFromUrl(url) {
+            if (!url) return;
+            
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = url;
+            
+            link.onload = function() {
+                const fontMatch = url.match(/family=([^&:]+)/);
+                if (fontMatch) {
+                    const fontName = decodeURIComponent(fontMatch[1]).replace(/\+/g, ' ');
+                    customFonts[fontName] = fontName;
+                    
+                    const select = $('fontFamily');
+                    const option = new Option(fontName, fontName);
+                    select.add(option);
+                    select.value = fontName;
+                    
+                    showNotification(`Font "${fontName}" loaded from URL!`);
+                    applyStyleToActive();
+                }
+            };
+            
+            link.onerror = function() {
+                showNotification('Failed to load font from URL', 'error');
+            };
+            
+            document.head.appendChild(link);
+        }
+
+        // File upload handlers
+        $('templateFile').addEventListener('change', function (e) {
+            const f = e.target.files[0];
+            if (!f) return;
+            
+            updateFileNameDisplay('template', f.name);
+            
+            const reader = new FileReader();
+            reader.onload = ev => {
+                templateImage = new Image();
+                templateImage.onload = () => {
+                    const maxW = 420, maxH = 600;
+                    const scale = Math.min(maxW / templateImage.width, maxH / templateImage.height, 1);
+                    preview.width = Math.round(templateImage.width * scale);
+                    preview.height = Math.round(templateImage.height * scale);
+                    $('cardW').value = templateImage.width;
+                    $('cardH').value = templateImage.height;
+                    drawPreview();
+                    populateLeftInputsFromLayout();
+                    showNotification('Template image loaded successfully!');
+                };
+                templateImage.src = ev.target.result;
+            };
+            reader.readAsDataURL(f);
+        });
+
+        $('csvFile').addEventListener('change', (e) => {
+            const f = e.target.files[0]; 
+            if (!f) return;
+            
+            updateFileNameDisplay('csv', f.name);
+            
+            Papa.parse(f, {
+                header: true, 
+                skipEmptyLines: true, 
+                complete: (res) => {
+                    csvRows = res.data;
+                    csvHeaders = res.meta.fields || Object.keys(csvRows[0] || {});
+                    populateMappingDropdowns();
+                    livePreview();
+                    showNotification(`CSV loaded with ${csvRows.length} records!`);
+                }
+            });
+        });
+
+        $('layoutFile').addEventListener('change', function(e) {
+            const f = e.target.files[0];
+            if (!f) return;
+            
+            updateFileNameDisplay('layout', f.name);
+            
+            const r = new FileReader();
+            r.onload = ev => {
+                try {
+                    const obj = JSON.parse(ev.target.result);
+                    if (!obj.layout) { 
+                        showNotification('Invalid layout file - missing layout object', 'error'); 
+                        return; 
+                    }
+                    
+                    layout = Object.assign({}, layout, obj.layout);
+
+                    if (obj.maps) {
+                        if ($('mapPhoto')) $('mapPhoto').value = obj.maps.photo || '';
+                        if ($('mapName')) $('mapName').value = obj.maps.name || '';
+                        if ($('mapID')) $('mapID').value = obj.maps.id || '';
+                        if ($('mapBarcode')) $('mapBarcode').value = obj.maps.barcode || '';
+                    }
+
+                    populateLeftInputsFromLayout();
+                    updateMappingStatus();
+                    drawPreview();
+                    livePreview();
+                    showNotification('Layout imported successfully!');
+                } catch (err) {
+                    console.error(err); 
+                    showNotification('Invalid JSON file', 'error');
+                }
+            };
+            r.readAsText(f);
+        });
+
+        $('fontFile').addEventListener('change', loadCustomFont);
+
+        function populateMappingDropdowns() {
+            const selects = { 
+                mapPhoto: $('mapPhoto'), 
+                mapName: $('mapName'), 
+                mapID: $('mapID'), 
+                mapBarcode: $('mapBarcode') 
+            };
+            
+            Object.values(selects).forEach(s => {
+                if (!s) return;
+                s.innerHTML = '<option value="">— none —</option>';
+                csvHeaders.forEach(h => s.insertAdjacentHTML('beforeend', `<option value="${h}">${h}</option>`));
+            });
+
+            function trySet(id, names) {
+                const found = csvHeaders.find(h => names.includes(h.toLowerCase()));
+                if (found && $(id)) $(id).value = found;
+            }
+            
+            trySet('mapPhoto', ['profile', 'photo', 'image', 'picture', 'img', 'profilepicture', 'profile_image', 'profile_pic']);
+            trySet('mapName', ['name', 'studentname', 'full_name', 'fullname']);
+            trySet('mapID', ['id', 'rollno', 'roll', 'studentid', 'instituteid']);
+
+            if ($('mapID') && $('mapBarcode')) $('mapBarcode').value = $('mapID').value || '';
+            
+            updateMappingStatus();
+        }
+
+        function updateMappingStatus() {
+            const mappings = {
+                'label-photo': $('mapPhoto')?.value,
+                'label-name': $('mapName')?.value,
+                'label-roll': $('mapID')?.value,
+                'label-barcode': $('mapBarcode')?.value
+            };
+            
+            Object.entries(mappings).forEach(([labelId, value]) => {
+                const label = $(labelId);
+                if (label) {
+                    if (value) {
+                        label.textContent = 'Mapped';
+                        label.className = 'status-indicator status-mapped';
+                    } else {
+                        label.textContent = 'Unmapped';
+                        label.className = 'status-indicator status-unmapped';
+                    }
+                }
+            });
+        }
+
+        function drawPreview() {
+            pctx.clearRect(0, 0, preview.width, preview.height);
+            if (templateImage) {
+                pctx.drawImage(templateImage, 0, 0, preview.width, preview.height);
+            } else { 
+                pctx.fillStyle = '#fff'; 
+                pctx.fillRect(0, 0, preview.width, preview.height); 
+            }
+            
+            if ($('snapToggle').checked) drawGrid();
+            if (showOverlays) drawOverlays();
+        }
+
+        function drawGrid() {
+            const grid = parseInt($('gridSize').value) || 10;
+            pctx.save(); 
+            pctx.globalAlpha = 0.08; 
+            pctx.strokeStyle = '#667eea';
+            pctx.lineWidth = 1;
+            
+            for (let x = 0; x < preview.width; x += grid) { 
+                pctx.beginPath(); 
+                pctx.moveTo(x, 0); 
+                pctx.lineTo(x, preview.height); 
+                pctx.stroke(); 
+            }
+            
+            for (let y = 0; y < preview.height; y += grid) { 
+                pctx.beginPath(); 
+                pctx.moveTo(0, y); 
+                pctx.lineTo(preview.width, y); 
+                pctx.stroke(); 
+            }
+            pctx.restore();
+        }
+
+        function actualToPreview(ax, ay) { 
+            if (!templateImage) return { x: ax, y: ay }; 
+            const sx = preview.width / templateImage.width; 
+            const sy = preview.height / templateImage.height; 
+            return { x: Math.round(ax * sx), y: Math.round(ay * sy) }; 
+        }
+        
+        function previewToActual(px, py) { 
+            if (!templateImage) return { x: px, y: py }; 
+            const sx = templateImage.width / preview.width; 
+            const sy = templateImage.height / preview.height; 
+            return { x: Math.round(px * sx), y: Math.round(py * sy) }; 
+        }
+
+        function drawOverlays() {
+            if (!templateImage) return;
+            const scale = preview.width / templateImage.width;
+            
+            // Photo overlay
+            const p = actualToPreview(layout.photoX || defaultLayout.photoX, layout.photoY || defaultLayout.photoY);
+            const psize = layout.photoSize || defaultLayout.photoSize;
+            const r = Math.round(psize * scale);
+            
+            pctx.save(); 
+            pctx.globalAlpha = 0.3; 
+            pctx.fillStyle = selectedElement === 'photo' ? '#667eea' : '#ef4444';
+            
+            if (layout.photoShape === 'circle') { 
+                pctx.beginPath(); 
+                pctx.arc(p.x, p.y, r, 0, Math.PI * 2); 
+                pctx.fill(); 
+            } else {
+                pctx.fillRect(p.x - r, p.y - r, r * 2, r * 2);
+            }
+            pctx.restore();
+
+            // Photo border
+            pctx.save(); 
+            pctx.lineWidth = selectedElement === 'photo' ? 3 : 2;
+            pctx.strokeStyle = selectedElement === 'photo' ? '#667eea' : 'rgba(0,0,0,0.3)';
+            
+            if (layout.photoShape === 'circle') { 
+                pctx.beginPath(); 
+                pctx.arc(p.x, p.y, r + (selectedElement === 'photo' ? 6 : 2), 0, Math.PI * 2); 
+                pctx.stroke(); 
+            } else {
+                pctx.strokeRect(p.x - r - (selectedElement === 'photo' ? 6 : 2), p.y - r - (selectedElement === 'photo' ? 6 : 2), (r * 2) + (selectedElement === 'photo' ? 12 : 4), (r * 2) + (selectedElement === 'photo' ? 12 : 4));
+            }
+            pctx.restore();
+            
+            // Photo label
+            pctx.fillStyle = '#fff'; 
+            pctx.font = 'bold 12px Inter'; 
+            pctx.fillText('Photo', p.x + 8, p.y - 8);
+
+            // Text elements overlay
+            const textEls = ['name', 'roll'];
+            textEls.forEach(el => {
+                const ax = layout[el + 'X'] || defaultLayout[el + 'X'];
+                const ay = layout[el + 'Y'] || defaultLayout[el + 'Y'];
+                const pos = actualToPreview(ax, ay);
+                const w = Math.max(80, Math.round((layout[el + 'MaxWidth'] || 200) * scale));
+                const h = Math.round((layout[el + 'Line'] || 22) * 1.3);
+                
+                pctx.save(); 
+                pctx.globalAlpha = 0.2; 
+                pctx.fillStyle = selectedElement === el ? '#667eea' : (el === 'name' ? '#10b981' : '#f59e0b');
+                pctx.fillRect(pos.x, pos.y - h / 2, w, h);
+                
+                pctx.globalAlpha = 1; 
+                pctx.strokeStyle = selectedElement === el ? '#667eea' : 'rgba(0,0,0,0.2)';
+                pctx.lineWidth = selectedElement === el ? 3 : 1;
+                pctx.strokeRect(pos.x - (selectedElement === el ? 4 : 0), pos.y - h / 2 - (selectedElement === el ? 4 : 0), w + (selectedElement === el ? 8 : 0), h + (selectedElement === el ? 8 : 0));
+                
+                pctx.fillStyle = '#fff'; 
+                pctx.font = 'bold 12px Inter'; 
+                pctx.fillText(el.charAt(0).toUpperCase() + el.slice(1), pos.x + 6, pos.y - (h / 2) + 4);
+                pctx.restore();
+            });
+
+            // Barcode overlay
+            const bx = layout.barcodeX || defaultLayout.barcodeX;
+            const by = layout.barcodeY || defaultLayout.barcodeY;
+            const bw = layout.barcodeW || defaultLayout.barcodeW;
+            const bh = layout.barcodeH || defaultLayout.barcodeH;
+            const ppos = actualToPreview(bx, by);
+            
+            pctx.save();
+            pctx.globalAlpha = 0.25; 
+            pctx.fillStyle = selectedElement === 'barcode' ? '#667eea' : '#374151';
+            const pw = Math.round(bw * (preview.width / templateImage.width));
+            const ph = Math.max(8, Math.round(bh * (preview.height / templateImage.height)));
+            pctx.fillRect(ppos.x - Math.round(pw / 2), ppos.y - Math.round(ph / 2), pw, ph);
+            
+            pctx.globalAlpha = 1; 
+            pctx.strokeStyle = selectedElement === 'barcode' ? '#667eea' : 'rgba(0,0,0,0.2)';
+            pctx.lineWidth = selectedElement === 'barcode' ? 3 : 1;
+            pctx.strokeRect(ppos.x - Math.round(pw / 2) - (selectedElement === 'barcode' ? 4 : 0), ppos.y - Math.round(ph / 2) - (selectedElement === 'barcode' ? 4 : 0), pw + (selectedElement === 'barcode' ? 8 : 0), ph + (selectedElement === 'barcode' ? 8 : 0));
+            
+            pctx.fillStyle = '#fff'; 
+            pctx.font = 'bold 12px Inter'; 
+            pctx.fillText('Barcode', ppos.x - Math.round(pw / 2) + 6, ppos.y - Math.round(ph / 2) - 6);
+            pctx.restore();
+        }
+
+        function toggleOverlayLabels() { 
+            showOverlays = !showOverlays; 
+            $('showOverlaysInput').checked = showOverlays;
+            drawPreview(); 
+        }
+
+        function selectElement(el) {
+            selectedElement = el;
+            $('activeField').textContent = el.charAt(0).toUpperCase() + el.slice(1);
+            
+            document.querySelectorAll('.control-group').forEach(r => r.classList.remove('active-element'));
+            const row = document.getElementById('row-' + el); 
+            if (row) row.classList.add('active-element');
+            
+            setActiveStyleInputs(); 
+            drawPreview();
+        }
+
+        preview.addEventListener('click', function (e) {
+            const rect = preview.getBoundingClientRect();
+            const px = e.clientX - rect.left;
+            const py = e.clientY - rect.top;
+            
+            if (placingElement) {
+                const actual = previewToActual(px, py);
+                placeAtActive(placingElement, actual.x, actual.y);
+                const elementName = placingElement;
+                placingElement = null; 
+                preview.style.cursor = 'default';
+                drawPreview(); 
+                livePreview();
+                showNotification(`${elementName} positioned successfully!`);
+            }
+        });
+
+        function enterPlaceMode(el) { 
+            placingElement = el; 
+            preview.style.cursor = 'crosshair'; 
+            showNotification(`Click on the preview to position "${el}". Press Esc to cancel.`, 'warning');
+        }
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && placingElement) { 
+                placingElement = null; 
+                preview.style.cursor = 'default'; 
+                showNotification('Placement cancelled');
+            }
+            
+            if (!['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+                const step = e.shiftKey ? 10 : 1; 
+                let dx = 0, dy = 0;
+                
+                if (e.key === 'ArrowUp') { dy = -step; e.preventDefault(); }
+                if (e.key === 'ArrowDown') { dy = step; e.preventDefault(); }
+                if (e.key === 'ArrowLeft') { dx = -step; e.preventDefault(); }
+                if (e.key === 'ArrowRight') { dx = step; e.preventDefault(); }
+                
+                if (dx || dy) nudgeElement(selectedElement, dx, dy);
+            }
+        });
+
+        function placeAtActive(el, ax, ay) {
+            if (el === 'photo') { 
+                layout.photoX = ax; 
+                layout.photoY = ay; 
+                $('photoX_input').value = layout.photoX; 
+                $('photoY_input').value = layout.photoY; 
+            } else if (el === 'roll') { 
+                layout.rollX = ax; 
+                layout.rollY = ay; 
+                $('rollX_input').value = layout.rollX; 
+                $('rollY_input').value = layout.rollY; 
+            } else if (el === 'barcode') { 
+                layout.barcodeX = ax; 
+                layout.barcodeY = ay; 
+                $('barcodeX_input').value = layout.barcodeX; 
+                $('barcodeY_input').value = layout.barcodeY; 
+            } else { 
+                layout[el + 'X'] = ax; 
+                layout[el + 'Y'] = ay; 
+                $(el + 'X_input').value = layout[el + 'X']; 
+                $(el + 'Y_input').value = layout[el + 'Y']; 
+            }
+        }
+
+        function nudgeElement(el, dx, dy) {
+            if (el === 'photo') { 
+                layout.photoX = (layout.photoX || defaultLayout.photoX) + dx; 
+                layout.photoY = (layout.photoY || defaultLayout.photoY) + dy; 
+                $('photoX_input').value = layout.photoX; 
+                $('photoY_input').value = layout.photoY; 
+            } else if (el === 'roll') { 
+                layout.rollX = (layout.rollX || defaultLayout.rollX) + dx; 
+                layout.rollY = (layout.rollY || defaultLayout.rollY) + dy; 
+                $('rollX_input').value = layout.rollX; 
+                $('rollY_input').value = layout.rollY; 
+            } else if (el === 'barcode') { 
+                layout.barcodeX = (layout.barcodeX || defaultLayout.barcodeX) + dx; 
+                layout.barcodeY = (layout.barcodeY || defaultLayout.barcodeY) + dy; 
+                $('barcodeX_input').value = layout.barcodeX; 
+                $('barcodeY_input').value = layout.barcodeY; 
+            } else { 
+                layout[el + 'X'] = (layout[el + 'X'] || defaultLayout[el + 'X']) + dx; 
+                layout[el + 'Y'] = (layout[el + 'Y'] || defaultLayout[el + 'Y']) + dy; 
+                $(el + 'X_input').value = layout[el + 'X']; 
+                $(el + 'Y_input').value = layout[el + 'Y']; 
+            }
+            drawPreview(); 
+            livePreview();
+        }
+
+        function wirePositionInputs() {
+            const inputs = document.querySelectorAll('.pos-input');
+            inputs.forEach(inp => inp.addEventListener('input', function () {
+                const id = this.id.split('_')[0];
+                const axis = id.endsWith('X') ? 'X' : 'Y';
+                const el = id.replace(/X$|Y$/, '');
+                const val = parseInt(this.value) || 0;
+                
+                if (el === 'photo') { 
+                    if (axis === 'X') layout.photoX = val; 
+                    else layout.photoY = val; 
+                } else if (el === 'roll') { 
+                    if (axis === 'X') layout.rollX = val; 
+                    else layout.rollY = val; 
+                } else if (el === 'barcode') { 
+                    if (axis === 'X') layout.barcodeX = val; 
+                    else layout.barcodeY = val; 
+                } else { 
+                    layout[el + axis] = val; 
+                }
+                drawPreview(); 
+                livePreview();
+            }));
+        }
+
+        function updatePhotoSizeFromSlider(v) { 
+            const val = parseInt(v) || 80; 
+            $('photoSize_input').value = val; 
+            $('photoSize').value = val;
+            layout.photoSize = val; 
+            drawPreview(); 
+            livePreview(); 
+        }
+
+        function snap(v) { 
+            if (!$('snapToggle').checked) return v; 
+            const g = parseInt($('gridSize').value) || 10; 
+            return Math.round(v / g) * g; 
+        }
+        
+        function snapAllToGrid() {
+            ['photo', 'name', 'roll', 'barcode'].forEach(k => {
+                if (k === 'photo') { 
+                    layout.photoX = snap(layout.photoX || defaultLayout.photoX); 
+                    layout.photoY = snap(layout.photoY || defaultLayout.photoY); 
+                    layout.photoSize = snap(layout.photoSize || defaultLayout.photoSize); 
+                } else { 
+                    layout[k + 'X'] = snap(layout[k + 'X'] || defaultLayout[k + 'X']); 
+                    layout[k + 'Y'] = snap(layout[k + 'Y'] || defaultLayout[k + 'Y']); 
+                }
+            });
+            populateLeftInputsFromLayout(); 
+            drawPreview(); 
+            livePreview();
+            showNotification('All elements snapped to grid!');
+        }
+
+        function setActiveStyleInputs() {
+            const el = selectedElement || 'photo';
+            $('activeField').textContent = el.charAt(0).toUpperCase() + el.slice(1);
+            
+            document.querySelectorAll('.control-group').forEach(r => r.classList.remove('active-element'));
+            const row = document.getElementById('row-' + el); 
+            if (row) row.classList.add('active-element');
+
+            if (el === 'photo') {
+                $('photoSize').value = layout.photoSize || defaultLayout.photoSize; 
+                $('photoShape').value = layout.photoShape || defaultLayout.photoShape; 
+                $('photoBorder').value = layout.photoBorder || 0;
+                $('photoBorderColor').value = layout.photoBorderColor || '#ffffff';
+                $('photoRadius').value = layout.photoRadius || defaultLayout.photoRadius;
+            } else if (el === 'barcode') {
+                $('barcodeW').value = layout.barcodeW || defaultLayout.barcodeW; 
+                $('barcodeH').value = layout.barcodeH || defaultLayout.barcodeH; 
+                $('barcodeFormat').value = layout.barcodeFormat || defaultLayout.barcodeFormat;
+            } else {
+                const prefix = (el === 'roll') ? 'roll' : el;
+                $('fontFamily').value = layout[prefix + 'Family'] || defaultLayout[prefix + 'Family'] || 'Arial';
+                $('fontSize').value = layout[prefix + 'Size'] || defaultLayout[prefix + 'Size'] || (prefix === 'name' ? 28 : 18);
+                $('fontWeight').value = layout[prefix + 'Weight'] || defaultLayout[prefix + 'Weight'] || 400;
+                $('fontStyle').value = layout[prefix + 'Style'] || defaultLayout[prefix + 'Style'] || 'normal';
+                $('fontColor').value = layout[prefix + 'Color'] || defaultLayout[prefix + 'Color'] || '#000000';
+                $('lineHeight').value = layout[prefix + 'Line'] || defaultLayout[prefix + 'Line'] || (parseInt($('fontSize').value) + 6);
+                $('maxWidth').value = layout[prefix + 'MaxWidth'] || defaultLayout[prefix + 'MaxWidth'] || 300;
+                $('textAlign').value = layout[prefix + 'Align'] || defaultLayout[prefix + 'Align'] || 'left';
+                $('autoFit').value = layout[prefix + 'AutoFit'] ? '1' : '0';
+                $('maxLines').value = layout[prefix + 'MaxLines'] || defaultLayout[prefix + 'MaxLines'] || 2;
+            }
+        }
+
+        function applyStyleToActive() {
+            const el = selectedElement || 'photo';
+            if (el === 'photo') {
+                layout.photoSize = parseInt($('photoSize').value) || layout.photoSize; 
+                layout.photoShape = $('photoShape').value; 
+                layout.photoBorder = parseInt($('photoBorder').value) || 0; 
+                layout.photoBorderColor = $('photoBorderColor').value || '#ffffff';
+                layout.photoRadius = parseInt($('photoRadius').value) || defaultLayout.photoRadius;
+            } else if (el === 'barcode') {
+                layout.barcodeW = parseInt($('barcodeW').value) || layout.barcodeW; 
+                layout.barcodeH = parseInt($('barcodeH').value) || layout.barcodeH; 
+                layout.barcodeFormat = $('barcodeFormat').value || layout.barcodeFormat;
+            } else {
+                const prefix = (el === 'roll') ? 'roll' : el;
+                layout[prefix + 'Family'] = $('fontFamily').value; 
+                layout[prefix + 'Size'] = parseInt($('fontSize').value) || (prefix === 'name' ? 28 : 18);
+                layout[prefix + 'Weight'] = $('fontWeight').value; 
+                layout[prefix + 'Style'] = $('fontStyle').value; 
+                layout[prefix + 'Color'] = $('fontColor').value;
+                layout[prefix + 'Line'] = parseInt($('lineHeight').value) || (layout[prefix + 'Size'] + 6); 
+                layout[prefix + 'MaxWidth'] = parseInt($('maxWidth').value) || 300; 
+                layout[prefix + 'Align'] = $('textAlign').value; 
+                layout[prefix + 'AutoFit'] = $('autoFit').value === '1'; 
+                layout[prefix + 'MaxLines'] = parseInt($('maxLines').value) || 2;
+            }
+            drawPreview(); 
+            livePreview();
+        }
+
+        function applyStyleToAll() {
+            const family = $('fontFamily').value; 
+            const size = parseInt($('fontSize').value) || 18;
+            const color = $('fontColor').value;
+            
+            ['name', 'roll'].forEach(k => {
+                const prefix = (k === 'roll') ? 'roll' : k;
+                layout[prefix + 'Family'] = family; 
+                layout[prefix + 'Size'] = size; 
+                layout[prefix + 'Weight'] = $('fontWeight').value; 
+                layout[prefix + 'Style'] = $('fontStyle').value; 
+                layout[prefix + 'Color'] = color;
+                layout[prefix + 'Line'] = parseInt($('lineHeight').value) || 20; 
+                layout[prefix + 'MaxWidth'] = parseInt($('maxWidth').value) || 300; 
+                layout[prefix + 'Align'] = $('textAlign').value; 
+                layout[prefix + 'AutoFit'] = $('autoFit').value === '1'; 
+                layout[prefix + 'MaxLines'] = parseInt($('maxLines').value) || 2;
+            });
+            drawPreview(); 
+            livePreview();
+            showNotification('Style applied to all text fields!');
+        }
+
+        // Text processing functions
+        function autoFitFont(ctx, text, maxWidth, initialSize, family, weight, style, minSize = 8, maxLines = 3) {
+            let size = initialSize; 
+            let lines = [];
+            
+            while (size >= minSize) {
+                ctx.font = `${style} ${weight} ${size}px ${family}`;
+                lines = breakTextToLines(ctx, text, maxWidth, maxLines);
+                const maxLineWidth = lines.reduce((m, l) => Math.max(m, ctx.measureText(l).width), 0);
+                if (maxLineWidth <= maxWidth) break;
+                size -= 1;
+            }
+            return { size, lines };
+        }
+        
+        function breakTextToLines(ctx, text, maxWidth, maxLines) {
+            const words = String(text).split(' ');
+            const result = []; 
+            let line = '';
+            
+            for (let i = 0; i < words.length; i++) {
+                const test = (line ? line + ' ' : '') + words[i];
+                if (ctx.measureText(test).width > maxWidth && line) {
+                    result.push(line); 
+                    line = words[i];
+                    if (result.length >= maxLines) break;
+                } else {
+                    line = test;
+                }
+            }
+            
+            if (result.length < maxLines && line) result.push(line);
+            if (result.length > maxLines) result.length = maxLines;
+            if (result.length === maxLines && ctx.measureText(result[result.length - 1]).width > maxWidth) {
+                let s = result[result.length - 1];
+                while (ctx.measureText(s + '...').width > maxWidth && s.length) s = s.slice(0, -1);
+                result[result.length - 1] = s.trim() + '...';
+            }
+            return result;
+        }
+
+        function processCSV() {
+            if (!csvRows.length) { 
+                showNotification('Please upload a CSV file first', 'error'); 
+                return; 
+            }
+            if (!templateImage) { 
+                showNotification('Please upload a template image first', 'error'); 
+                return; 
+            }
+            
+            showNotification(`Generating ${csvRows.length} ID cards...`, 'warning');
+            generateAll(csvRows);
+        }
+
+        function generateAll(rows) {
+            const container = $('cardsContainer'); 
+            container.innerHTML = '';
+            
+            rows.forEach((r, idx) => {
+                const holder = document.createElement('div'); 
+                holder.className = 'preview-card';
+                
+                const canvas = document.createElement('canvas'); 
+                canvas.width = parseInt($('cardW').value) || layout.cardW; 
+                canvas.height = parseInt($('cardH').value) || layout.cardH; 
+                canvas.className = 'preview-canvas';
+                const ctx = canvas.getContext('2d');
+                
+                if (templateImage) {
+                    ctx.drawImage(templateImage, 0, 0, canvas.width, canvas.height);
+                } else { 
+                    ctx.fillStyle = '#fff'; 
+                    ctx.fillRect(0, 0, canvas.width, canvas.height); 
+                }
+
+                const photoKey = $('mapPhoto').value; 
+                const photoUrl = photoKey ? (r[photoKey] || r[photoKey.toLowerCase()] || '') : '';
+                
+                if (photoUrl) {
+                    const img = new Image(); 
+                    img.crossOrigin = "anonymous";
+                    img.onload = () => { 
+                        drawPhotoOnCanvas(ctx, img, canvas); 
+                        drawAllTextAndBarcode(ctx, r, canvas); 
+                    };
+                    img.onerror = () => { 
+                        drawAllTextAndBarcode(ctx, r, canvas); 
+                    };
+                    img.src = photoUrl;
+                } else { 
+                    drawAllTextAndBarcode(ctx, r, canvas); 
+                }
+
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'preview-actions';
+                
+                const btn = document.createElement('button'); 
+                btn.className = 'btn btn-primary'; 
+                btn.innerHTML = '<span>⬇️</span> Download';
+                
+                const nameForFile = sanitizeFilename((r[$('mapID').value] || `card-${idx + 1}`) + '_' + (r[$('mapName').value] || ''));
+                btn.onclick = () => downloadCanvas(canvas, nameForFile);
+                
+                actionsDiv.appendChild(btn);
+                holder.appendChild(canvas); 
+                holder.appendChild(actionsDiv);
+                container.appendChild(holder);
+            });
+            
+            showNotification(`Generated ${rows.length} ID cards successfully!`);
+        }
+
+        // Canvas drawing functions
+        function drawPhotoOnCanvas(ctx, img, canvasEl) {
+            ctx.save();
+            const x = layout.photoX || defaultLayout.photoX;
+            const y = layout.photoY || defaultLayout.photoY;
+            const size = layout.photoSize || defaultLayout.photoSize;
+            
+            if (layout.photoShape === 'circle') {
+                ctx.beginPath(); 
+                ctx.arc(x, y, size, 0, Math.PI * 2); 
+                ctx.closePath(); 
+                ctx.clip();
+                ctx.drawImage(img, x - size, y - size, size * 2, size * 2); 
+                ctx.restore();
+                
+                if (layout.photoBorder > 0) { 
+                    ctx.beginPath(); 
+                    ctx.arc(x, y, size + layout.photoBorder / 2, 0, Math.PI * 2); 
+                    ctx.lineWidth = layout.photoBorder; 
+                    ctx.strokeStyle = layout.photoBorderColor || '#ffffff'; 
+                    ctx.stroke(); 
+                }
+            } else if (layout.photoShape === 'rectangle') {
+                const w = size, h = size; 
+                ctx.drawImage(img, x - w / 2, y - h / 2, w, h);
+                
+                if (layout.photoBorder > 0) { 
+                    ctx.lineWidth = layout.photoBorder; 
+                    ctx.strokeStyle = layout.photoBorderColor || '#ffffff'; 
+                    ctx.strokeRect(x - w / 2, y - h / 2, w, h); 
+                }
+            } else {
+                const w = size, h = size, r = layout.photoRadius || 12; 
+                roundRectClip(ctx, x - w / 2, y - h / 2, w, h, r);
+                ctx.drawImage(img, x - w / 2, y - h / 2, w, h); 
+                ctx.restore();
+                
+                if (layout.photoBorder > 0) {
+                    roundRectStroke(ctx, x - w / 2, y - h / 2, w, h, r, layout.photoBorder, layout.photoBorderColor || '#ffffff');
+                }
+            }
+        }
+
+        function roundRectClip(ctx, x, y, w, h, r) {
+            ctx.beginPath(); 
+            ctx.moveTo(x + r, y); 
+            ctx.lineTo(x + w - r, y); 
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r); 
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h); 
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r); 
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y); 
+            ctx.closePath(); 
+            ctx.clip();
+        }
+        
+        function roundRectStroke(ctx, x, y, w, h, r, border, color) {
+            ctx.save(); 
+            ctx.beginPath(); 
+            ctx.moveTo(x + r, y); 
+            ctx.lineTo(x + w - r, y); 
+            ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+            ctx.lineTo(x + w, y + h - r); 
+            ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+            ctx.lineTo(x + r, y + h); 
+            ctx.quadraticCurveTo(x, y + h, x, y + h - r); 
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y); 
+            ctx.closePath(); 
+            ctx.lineWidth = border; 
+            ctx.strokeStyle = color; 
+            ctx.stroke(); 
+            ctx.restore();
+        }
+
+        function drawAllTextAndBarcode(ctx, row, canvasEl) {
+            drawAllTextOnCanvas(ctx, row);
+            drawBarcodeOnCanvas(ctx, row);
+        }
+
+        function drawAllTextOnCanvas(ctx, row) {
+            const read = k => { 
+                const map = { Name: 'mapName', ID: 'mapID' }; 
+                const sel = $(map[k]).value; 
+                return sel ? (row[sel] || row[sel.toLowerCase()] || '') : ''; 
+            };
+            
+            const fieldSpecs = [
+                { key: 'name', label: read('Name') || '', prefix: 'name' }, 
+                { key: 'roll', label: read('ID') || '', prefix: 'roll' }
+            ];
+            
+            fieldSpecs.forEach(f => {
+                if (!f.label) return;
+                
+                const prefix = f.prefix;
+                const x = layout[prefix + 'X'] || defaultLayout[prefix + 'X'];
+                const y = layout[prefix + 'Y'] || defaultLayout[prefix + 'Y'];
+                const family = layout[prefix + 'Family'] || defaultLayout[prefix + 'Family'] || 'Arial';
+                const initSize = layout[prefix + 'Size'] || defaultLayout[prefix + 'Size'] || 18;
+                const weight = layout[prefix + 'Weight'] || defaultLayout[prefix + 'Weight'] || 400;
+                const style = layout[prefix + 'Style'] || 'normal';
+                const color = layout[prefix + 'Color'] || defaultLayout[prefix + 'Color'] || '#000';
+                const line = layout[prefix + 'Line'] || defaultLayout[prefix + 'Line'] || (initSize + 6);
+                const maxWidth = layout[prefix + 'MaxWidth'] || defaultLayout[prefix + 'MaxWidth'];
+                const align = layout[prefix + 'Align'] || defaultLayout[prefix + 'Align'] || 'left';
+                const autoFit = layout[prefix + 'AutoFit'] === undefined ? true : !!layout[prefix + 'AutoFit'];
+                const maxLines = layout[prefix + 'MaxLines'] || defaultLayout[prefix + 'MaxLines'] || 3;
+                
+                ctx.fillStyle = color;
+                
+                if (maxWidth && autoFit) {
+                    const { size, lines } = autoFitFont(ctx, f.label, maxWidth, initSize, family, weight, style, 8, maxLines);
+                    ctx.font = `${style} ${weight} ${size}px ${family}`; 
+                    ctx.textBaseline = 'top';
+                    
+                    let yy = y; 
+                    lines.forEach(lineText => { 
+                        drawAlignedText(ctx, lineText, x, yy, align); 
+                        yy += (layout[prefix + 'Line'] || line); 
+                    });
+                } else {
+                    ctx.font = `${style} ${weight} ${initSize}px ${family}`; 
+                    ctx.textBaseline = 'top';
+                    const lines = breakTextToLines(ctx, f.label, maxWidth || 1000, maxLines);
+                    
+                    let yy = y; 
+                    lines.forEach(lineText => { 
+                        drawAlignedText(ctx, lineText, x, yy, align); 
+                        yy += (layout[prefix + 'Line'] || line); 
+                    });
+                }
+            });
+        }
+
+        function drawAlignedText(ctx, text, x, y, align = 'left') {
+            const metrics = ctx.measureText(text); 
+            const w = metrics.width;
+            
+            if (align === 'center') {
+                ctx.fillText(text, x - w / 2, y);
+            } else if (align === 'right') {
+                ctx.fillText(text, x - w, y);
+            } else {
+                ctx.fillText(text, x, y);
+            }
+        }
+
+        function drawBarcodeOnCanvas(ctx, row) {
+            const barcodeMap = $('mapBarcode') ? ($('mapBarcode').value || $('mapID').value) : $('mapID').value;
+            const idValue = barcodeMap ? (row[barcodeMap] || row[barcodeMap.toLowerCase()] || '') : '';
+            if (!idValue) return;
+            
+            const bw = layout.barcodeW || defaultLayout.barcodeW;
+            const bh = layout.barcodeH || defaultLayout.barcodeH;
+            const bx = layout.barcodeX || defaultLayout.barcodeX;
+            const by = layout.barcodeY || defaultLayout.barcodeY;
+            const format = layout.barcodeFormat || defaultLayout.barcodeFormat;
+
+            try {
+                const tempCanvas = document.createElement('canvas'); 
+                tempCanvas.width = bw; 
+                tempCanvas.height = bh;
+                
+                JsBarcode(tempCanvas, String(idValue), { 
+                    format: format, 
+                    displayValue: false, 
+                    height: bh, 
+                    width: 1, 
+                    margin: 0 
+                });
+                
+                const dx = Math.round(bx - bw / 2);
+                const dy = Math.round(by - bh / 2);
+                ctx.drawImage(tempCanvas, dx, dy, bw, bh);
+            } catch (err) {
+                console.warn('Barcode render failed', err);
+            }
+        }
+
+        function downloadCanvas(canvas, name) { 
+            canvas.toBlob(blob => { 
+                saveAs(blob, `${name}.png`); 
+                showNotification(`Downloaded ${name}.png`);
+            }); 
+        }
+        
+        function sanitizeFilename(s) { 
+            try { 
+                return s.toString().trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-\.]/g, ''); 
+            } catch (e) { 
+                return 'card'; 
+            } 
+        }
+
+        // Enhanced ZIP download functionality with progress bar
+        async function downloadAllZip() {
+            if (!csvRows.length) { 
+                showNotification('Please upload a CSV file first', 'error'); 
+                return; 
+            }
+            if (!templateImage) { 
+                showNotification('Please upload a template image first', 'error'); 
+                return; 
+            }
+            
+            const modal = showProgressModal();
+            const total = csvRows.length;
+            let failed = 0;
+            
+            try {
+                updateProgress(0, total, 'Initializing...');
+                
+                const zip = new JSZip(); 
+                const folder = zip.folder('idcards') || zip; 
+                
+                for (let i = 0; i < total; i++) {
+                    const row = csvRows[i];
+                    updateProgress(i + 1, total, `Processing card ${i + 1} of ${total}...`);
+                    
+                    try {
+                        const blob = await renderCardBlobForRow(row, i);
+                        const idVal = (row[$('mapID').value] || `card-${i + 1}`).toString();
+                        const nameVal = (row[$('mapName').value] || '').toString();
+                        const filename = sanitizeFilename(idVal + '_' + nameVal) || `card-${i + 1}`;
+                        folder.file(`${filename}.png`, blob);
+                        
+                        // Small delay to allow UI updates
+                        if (i % 10 === 0) {
+                            await new Promise(resolve => setTimeout(resolve, 10));
+                        }
+                    } catch (e) { 
+                        failed++; 
+                        console.warn('Failed to render card:', e);
+                    }
+                }
+                
+                updateProgress(total, total, 'Creating ZIP file...');
+                const content = await zip.generateAsync({ 
+                    type: 'blob',
+                    compression: 'DEFLATE',
+                    compressionOptions: { level: 6 }
+                });
+                
+                hideProgressModal();
+                saveAs(content, 'idcards.zip');
+                
+                if (failed > 0) {
+                    showNotification(`Generated ${total - failed} cards. ${failed} cards failed.`, 'warning');
+                } else {
+                    showNotification(`Successfully created ZIP with ${total} cards!`);
+                }
+            } catch (error) {
+                hideProgressModal();
+                console.error('ZIP creation failed:', error);
+                showNotification('Failed to create ZIP file', 'error');
+            }
+        }
+
+        async function renderCardBlobForRow(row, index) {
+            const cw = parseInt($('cardW').value) || layout.cardW; 
+            const ch = parseInt($('cardH').value) || layout.cardH;
+            const canvas = document.createElement('canvas'); 
+            canvas.width = cw; 
+            canvas.height = ch; 
+            const ctx = canvas.getContext('2d');
+            
+            if (templateImage) {
+                ctx.drawImage(templateImage, 0, 0, canvas.width, canvas.height); 
+            } else { 
+                ctx.fillStyle = '#fff'; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height); 
+            }
+
+            const photoKey = $('mapPhoto').value; 
+            const photoUrl = photoKey ? (row[photoKey] || row[photoKey.toLowerCase()] || '') : '';
+            
+            if (photoUrl) {
+                try {
+                    const img = await loadImagePromise(photoUrl);
+                    drawPhotoOnCanvas(ctx, img, canvas);
+                } catch (err) { 
+                    console.warn('Photo loading failed:', err);
+                }
+            }
+
+            drawAllTextOnCanvas(ctx, row);
+            drawBarcodeOnCanvas(ctx, row);
+
+            return new Promise(resolve => canvas.toBlob(blob => resolve(blob), 'image/png'));
+        }
+
+        function loadImagePromise(url) { 
+            return new Promise((resolve, reject) => { 
+                if (!url) { 
+                    reject('no-url'); 
+                    return; 
+                } 
+                const img = new Image(); 
+                img.crossOrigin = "anonymous"; 
+                img.onload = () => resolve(img); 
+                img.onerror = () => reject('img-error'); 
+                img.src = url; 
+            }); 
+        }
+
+        // Layout management functions
+        function exportLayout() {
+            const out = {
+                layout,
+                maps: {
+                    photo: $('mapPhoto') ? $('mapPhoto').value : '',
+                    name: $('mapName') ? $('mapName').value : '',
+                    id: $('mapID') ? $('mapID').value : '',
+                    barcode: $('mapBarcode') ? $('mapBarcode').value : ''
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); 
+            a.href = URL.createObjectURL(blob); 
+            a.download = 'idcard-layout.json'; 
+            a.click();
+            
+            showNotification('Layout exported successfully!');
+        }
+
+        function saveLayoutLocal() {
+            const layoutData = {
+                layout,
+                maps: { 
+                    photo: $('mapPhoto').value, 
+                    name: $('mapName').value, 
+                    id: $('mapID').value, 
+                    barcode: $('mapBarcode') ? $('mapBarcode').value : '' 
+                }
+            };
+            localStorage.setItem('idcard_layout', JSON.stringify(layoutData));
+            showNotification('Layout saved to browser storage!');
+        }
+
+        function livePreview() {
+            const first = csvRows.length ? csvRows[0] : { 
+                name: 'Sample Name', 
+                id: '000', 
+                profile: '', 
+                dob: '2000-01-01', 
+                bloodgroup: 'O+', 
+                contactno: '0000000000', 
+                address: 'Sample address' 
+            };
+            renderSingleOnPreview(first, true);
+        }
+        
+        function renderSingleOnPreview(row, isLive = false) {
+            const cw = parseInt($('cardW').value) || layout.cardW;
+            const ch = parseInt($('cardH').value) || layout.cardH;
+            const canvas = document.createElement('canvas'); 
+            canvas.width = cw; 
+            canvas.height = ch; 
+            canvas.className = 'preview-canvas';
+            const ctx = canvas.getContext('2d');
+            
+            if (templateImage) {
+                ctx.drawImage(templateImage, 0, 0, canvas.width, canvas.height); 
+            } else { 
+                ctx.fillStyle = '#fff'; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height); 
+            }
+            
+            const photoKey = $('mapPhoto').value; 
+            const photoUrl = photoKey ? (row[photoKey] || row[photoKey.toLowerCase()] || '') : '';
+            
+            if (photoUrl) {
+                const img = new Image(); 
+                img.crossOrigin = "anonymous";
+                img.onload = () => { 
+                    drawPhotoOnCanvas(ctx, img, canvas); 
+                    drawAllTextOnCanvas(ctx, row); 
+                    drawBarcodeOnCanvas(ctx, row); 
+                    appendPreview(canvas, isLive); 
+                };
+                img.onerror = () => { 
+                    drawAllTextOnCanvas(ctx, row); 
+                    drawBarcodeOnCanvas(ctx, row); 
+                    appendPreview(canvas, isLive); 
+                };
+                img.src = photoUrl;
+            } else { 
+                drawAllTextOnCanvas(ctx, row); 
+                drawBarcodeOnCanvas(ctx, row); 
+                appendPreview(canvas, isLive); 
+            }
+        }
+        
+        function appendPreview(canvas, isLive) {
+            const container = $('cardsContainer');
+            
+            if (isLive) {
+                const prev = document.getElementById('__live_preview'); 
+                if (prev) prev.remove();
+                
+                const holder = document.createElement('div'); 
+                holder.className = 'preview-card'; 
+                holder.id = '__live_preview';
+                holder.style.border = '3px solid #667eea';
+                
+                const el = document.createElement('canvas'); 
+                el.width = canvas.width; 
+                el.height = canvas.height; 
+                el.className = 'preview-canvas';
+                el.getContext('2d').drawImage(canvas, 0, 0);
+                
+                const actionsDiv = document.createElement('div');
+                actionsDiv.className = 'preview-actions';
+                actionsDiv.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <span style="font-size: 0.8rem; color: #667eea; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">LIVE PREVIEW</span>
+                        <span style="font-size: 0.8rem; color: var(--gray-500);">Updates automatically</span>
+                    </div>
+                `;
+                
+                const btn = document.createElement('button'); 
+                btn.className = 'btn btn-secondary'; 
+                btn.innerHTML = '<span>⬇️</span> Download Sample'; 
+                btn.onclick = () => downloadCanvas(el, 'sample');
+                
+                actionsDiv.appendChild(btn);
+                holder.appendChild(el); 
+                holder.appendChild(actionsDiv); 
+                container.prepend(holder);
+            }
+        }
+
+        function populateLeftInputsFromLayout() {
+            $('photoX_input').value = layout.photoX || defaultLayout.photoX; 
+            $('photoY_input').value = layout.photoY || defaultLayout.photoY;
+            $('nameX_input').value = layout.nameX || defaultLayout.nameX; 
+            $('nameY_input').value = layout.nameY || defaultLayout.nameY;
+            $('rollX_input').value = layout.rollX || defaultLayout.rollX; 
+            $('rollY_input').value = layout.rollY || defaultLayout.rollY;
+            $('barcodeX_input').value = layout.barcodeX || defaultLayout.barcodeX; 
+            $('barcodeY_input').value = layout.barcodeY || defaultLayout.barcodeY;
+            $('photoSize_input').value = layout.photoSize || defaultLayout.photoSize; 
+            $('photoSize').value = layout.photoSize || defaultLayout.photoSize;
+        }
+
+        function init() {
+            wirePositionInputs();
+            
+            // Element selection handlers
+            document.querySelectorAll('.control-group').forEach(row => {
+                row.addEventListener('click', () => { 
+                    const el = row.dataset.el; 
+                    if (el) selectElement(el); 
+                });
+            });
+            
+            // Form control event listeners for immediate feedback
+            ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'fontColor', 'lineHeight', 'maxWidth', 'textAlign', 'autoFit', 'maxLines'].forEach(id => {
+                const el = $(id); 
+                if (el) {
+                    el.addEventListener('input', applyStyleToActive);
+                    el.addEventListener('change', applyStyleToActive);
+                }
+            });
+            
+            // Photo size sync
+            $('photoSize').addEventListener('input', () => { 
+                $('photoSize_input').value = $('photoSize').value; 
+                layout.photoSize = parseInt($('photoSize').value) || layout.photoSize; 
+                drawPreview(); 
+                livePreview(); 
+            });
+            
+            // Photo controls
+            ['photoShape', 'photoBorder', 'photoBorderColor', 'photoRadius'].forEach(id => {
+                const el = $(id);
+                if (el) el.addEventListener('input', applyStyleToActive);
+            });
+            
+            // CSV mapping listeners
+            ['mapPhoto', 'mapName', 'mapID', 'mapBarcode'].forEach(id => { 
+                const el = $(id); 
+                if (el) {
+                    el.addEventListener('change', () => {
+                        updateMappingStatus();
+                        livePreview();
+                    }); 
+                }
+            });
+
+            // Barcode controls
+            ['barcodeW', 'barcodeH', 'barcodeFormat'].forEach(id => {
+                const el = $(id); 
+                if (el) {
+                    el.addEventListener('input', () => {
+                        layout.barcodeW = parseInt($('barcodeW').value) || layout.barcodeW;
+                        layout.barcodeH = parseInt($('barcodeH').value) || layout.barcodeH;
+                        layout.barcodeFormat = $('barcodeFormat').value || layout.barcodeFormat;
+                        drawPreview(); 
+                        livePreview();
+                    });
+                }
+            });
+            
+            // Card size controls
+            ['cardW', 'cardH'].forEach(id => {
+                const el = $(id);
+                if (el) {
+                    el.addEventListener('input', () => {
+                        layout.cardW = parseInt($('cardW').value) || layout.cardW;
+                        layout.cardH = parseInt($('cardH').value) || layout.cardH;
+                        drawPreview();
+                        livePreview();
+                    });
+                }
+            });
+
+            // Grid and overlay controls
+            $('gridSize').addEventListener('input', drawPreview);
+            $('snapToggle').addEventListener('change', drawPreview);
+
+            // Initialize UI state
+            setTimeout(() => { 
+                selectElement('photo'); 
+                setActiveStyleInputs(); 
+                drawPreview(); 
+                livePreview();
+                
+                // Try to load saved layout
+                const saved = localStorage.getItem('idcard_layout');
+                if (saved) {
+                    try {
+                        const obj = JSON.parse(saved);
+                        if (obj.layout) {
+                            layout = Object.assign({}, layout, obj.layout);
+                            populateLeftInputsFromLayout();
+                            setActiveStyleInputs();
+                            drawPreview();
+                            livePreview();
+                            showNotification('Loaded previously saved layout');
+                        }
+                    } catch (e) {
+                        console.warn('Failed to load saved layout:', e);
+                    }
+                }
+            }, 200);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 's':
+                        e.preventDefault();
+                        saveLayoutLocal();
+                        break;
+                    case 'g':
+                        e.preventDefault();
+                        if (csvRows.length && templateImage) {
+                            processCSV();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Auto-save functionality
+        let autoSaveTimeout;
+        function scheduleAutoSave() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                saveLayoutLocal();
+            }, 5000);
+        }
+
+        // Add drag and drop support
+        const container = document.querySelector('.container');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        container.addEventListener('dragover', function(e) {
+            container.style.background = 'linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%)';
+        });
+        
+        container.addEventListener('dragleave', function(e) {
+            container.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        });
+        
+        container.addEventListener('drop', function(e) {
+            container.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            
+            const files = Array.from(e.dataTransfer.files);
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    updateFileNameDisplay('template', file.name);
+                    // Handle template image
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        templateImage = new Image();
+                        templateImage.onload = function() {
+                            const maxW = 420, maxH = 600;
+                            const scale = Math.min(maxW / templateImage.width, maxH / templateImage.height, 1);
+                            preview.width = Math.round(templateImage.width * scale);
+                            preview.height = Math.round(templateImage.height * scale);
+                            $('cardW').value = templateImage.width;
+                            $('cardH').value = templateImage.height;
+                            drawPreview();
+                            populateLeftInputsFromLayout();
+                            showNotification('Template image loaded via drag & drop!');
+                        };
+                        templateImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else if (file.name.endsWith('.csv')) {
+                    updateFileNameDisplay('csv', file.name);
+                    // Handle CSV file
+                    Papa.parse(file, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            csvRows = results.data;
+                            csvHeaders = results.meta.fields || Object.keys(csvRows[0] || {});
+                            populateMappingDropdowns();
+                            livePreview();
+                            showNotification(`CSV loaded via drag & drop with ${csvRows.length} records!`);
+                        }
+                    });
+                } else if (file.name.endsWith('.json')) {
+                    updateFileNameDisplay('layout', file.name);
+                    // Handle layout file
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const obj = JSON.parse(e.target.result);
+                            if (obj.layout) {
+                                layout = Object.assign({}, layout, obj.layout);
+                                if (obj.maps) {
+                                    if ($('mapPhoto')) $('mapPhoto').value = obj.maps.photo || '';
+                                    if ($('mapName')) $('mapName').value = obj.maps.name || '';
+                                    if ($('mapID')) $('mapID').value = obj.maps.id || '';
+                                    if ($('mapBarcode')) $('mapBarcode').value = obj.maps.barcode || '';
+                                }
+                                populateLeftInputsFromLayout();
+                                updateMappingStatus();
+                                drawPreview();
+                                livePreview();
+                                showNotification('Layout loaded via drag & drop!');
+                            }
+                        } catch (err) {
+                            showNotification('Invalid layout file', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
