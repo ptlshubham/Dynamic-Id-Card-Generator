@@ -102,7 +102,7 @@ Dynamic-Id-Card-Generator/
 ├── index.html              # Main application file
 ├── README.md               # This file
 ├── VHK.json               # Sample layout configuration
-├── idcard-layout (2).json # Another sample layout
+├── idcard-layout.json # Another sample layout
 └── photo/        # Sample photos directory
     └── sample.jpg              # Sample photo
 ```
